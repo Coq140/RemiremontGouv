@@ -125,6 +125,7 @@
     <input type="text" id="username" placeholder="Nom d'utilisateur">
     <input type="password" id="password" placeholder="Mot de passe">
     <button onclick="login()">Connexion</button>
+    <p id="setupHint" style="color:#555;font-size:13px;margin-top:10px;"></p>
 </div>
 
 <!-- 🏛️ Panel admin -->
@@ -160,22 +161,45 @@
 </div>
 
 <script>
-    const ADMIN_USER = "admin";
-    const ADMIN_PASS = "remiremont";
-
     let civils = JSON.parse(localStorage.getItem("civilsRemiremont")) || [];
+
+    const adminData = JSON.parse(localStorage.getItem("adminRemiremont"));
+
+    if (!adminData) {
+        document.getElementById("setupHint").innerText =
+            "⚠️ Premier accès : choisissez un nom d'utilisateur et un mot de passe, puis cliquez sur Connexion pour les enregistrer.";
+    }
 
     function login() {
         const user = document.getElementById("username").value;
         const pass = document.getElementById("password").value;
 
-        if (user === ADMIN_USER && pass === ADMIN_PASS) {
-            document.getElementById("loginBox").style.display = "none";
-            document.getElementById("adminPanel").style.display = "block";
-            renderTable();
-        } else {
-            alert("Accès refusé.");
+        if (!user || !pass) {
+            alert("Veuillez remplir tous les champs.");
+            return;
         }
+
+        const savedAdmin = JSON.parse(localStorage.getItem("adminRemiremont"));
+
+        if (!savedAdmin) {
+            // Première connexion : on enregistre les identifiants
+            localStorage.setItem("adminRemiremont", JSON.stringify({ username: user, password: pass }));
+            alert("Compte administrateur créé avec succès.");
+            openPanel();
+        } else {
+            // Connexion normale
+            if (user === savedAdmin.username && pass === savedAdmin.password) {
+                openPanel();
+            } else {
+                alert("Identifiants incorrects.");
+            }
+        }
+    }
+
+    function openPanel() {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        renderTable();
     }
 
     function logout() {
