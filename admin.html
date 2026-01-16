@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration — Principauté de Remiremont</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #002147;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-box {
+            max-width: 350px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #002147;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .panel {
+            display: none;
+            padding: 30px;
+        }
+
+        h2 {
+            color: #002147;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+            max-width: 500px;
+        }
+
+        .form-section input, .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .form-section button {
+            margin-top: 15px;
+            padding: 10px;
+            background: #002147;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout {
+            float: right;
+            color: white;
+            text-decoration: none;
+        }
+
+        .actions button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background: #0077cc;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #cc0000;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Administration — Principauté de Remiremont</h1>
+    <a href="#" class="logout" onclick="logout()">Déconnexion</a>
+</header>
+
+<!-- 🔐 Connexion admin -->
+<div class="login-box" id="loginBox">
+    <h2>Connexion Administrateur</h2>
+    <input type="text" id="username" placeholder="Nom d'utilisateur">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button onclick="login()">Connexion</button>
+</div>
+
+<!-- 🏛️ Panel admin -->
+<div class="panel" id="adminPanel">
+    <h2>Gestion des civils</h2>
+
+    <table id="civilsTable">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Fonction</th>
+                <th>Adresse</th>
+                <th>Véhicule</th>
+                <th>Numéro ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Civils ajoutés ici -->
+        </tbody>
+    </table>
+
+    <div class="form-section">
+        <h3>Ajouter / Modifier un civil</h3>
+        <input type="hidden" id="editIndex">
+        <input type="text" id="prenom" placeholder="Prénom">
+        <input type="text" id="nom" placeholder="Nom">
+        <input type="text" id="fonction" placeholder="Fonction">
+        <input type="text" id="vehicule" placeholder="Véhicule enregistré">
+        <input type="text" id="numero" placeholder="Numéro d'identification">
+        <textarea id="adresse" placeholder="Adresse complète"></textarea>
+        <textarea id="notes" placeholder="Notes administratives"></textarea>
+        <button onclick="saveCivil()">Enregistrer</button>
+    </div>
+</div>
+
+<script>
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "remiremont";
+
+    let civils = [];
+
+    function login() {
+        const user = document.getElementById("username").value;
+        const pass = document.getElementById("password").value;
+
+        if (user === ADMIN_USER && pass === ADMIN_PASS) {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+        } else {
+            alert("Accès refusé.");
+        }
+    }
+
+    function logout() {
+        document.getElementById("adminPanel").style.display = "none";
+        document.getElementById("loginBox").style.display = "block";
+    }
+
+    function saveCivil() {
