@@ -142,16 +142,14 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            <!-- Civils ajoutés ici -->
-        </tbody>
+        <tbody></tbody>
     </table>
 
     <div class="form-section">
         <h3>Ajouter / Modifier un civil</h3>
         <input type="hidden" id="editIndex">
-        <input type="text" id="prenom" placeholder="Prénom">
-        <input type="text" id="nom" placeholder="Nom">
+        <input type="text" id="prenom" placeholder="Prénom" required>
+        <input type="text" id="nom" placeholder="Nom" required>
         <input type="text" id="fonction" placeholder="Fonction">
         <input type="text" id="vehicule" placeholder="Véhicule enregistré">
         <input type="text" id="numero" placeholder="Numéro d'identification">
@@ -165,7 +163,7 @@
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "remiremont";
 
-    let civils = [];
+    let civils = JSON.parse(localStorage.getItem("civilsRemiremont")) || [];
 
     function login() {
         const user = document.getElementById("username").value;
@@ -174,6 +172,7 @@
         if (user === ADMIN_USER && pass === ADMIN_PASS) {
             document.getElementById("loginBox").style.display = "none";
             document.getElementById("adminPanel").style.display = "block";
+            renderTable();
         } else {
             alert("Accès refusé.");
         }
@@ -185,3 +184,81 @@
     }
 
     function saveCivil() {
+        const civil = {
+            prenom: document.getElementById("prenom").value,
+            nom: document.getElementById("nom").value,
+            fonction: document.getElementById("fonction").value,
+            vehicule: document.getElementById("vehicule").value,
+            numero: document.getElementById("numero").value,
+            adresse: document.getElementById("adresse").value,
+            notes: document.getElementById("notes").value
+        };
+
+        const index = document.getElementById("editIndex").value;
+
+        if (index === "") {
+            civils.push(civil);
+        } else {
+            civils[index] = civil;
+            document.getElementById("editIndex").value = "";
+        }
+
+        localStorage.setItem("civilsRemiremont", JSON.stringify(civils));
+        clearForm();
+        renderTable();
+    }
+
+    function renderTable() {
+        const tbody = document.querySelector("#civilsTable tbody");
+        tbody.innerHTML = "";
+
+        civils.forEach((civil, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${civil.prenom} ${civil.nom}</td>
+                <td>${civil.fonction}</td>
+                <td>${civil.adresse}</td>
+                <td>${civil.vehicule}</td>
+                <td>${civil.numero}</td>
+                <td class="actions">
+                    <button class="edit-btn" onclick="editCivil(${index})">Modifier</button>
+                    <button class="delete-btn" onclick="deleteCivil(${index})">Supprimer</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function editCivil(index) {
+        const civil = civils[index];
+        document.getElementById("prenom").value = civil.prenom;
+        document.getElementById("nom").value = civil.nom;
+        document.getElementById("fonction").value = civil.fonction;
+        document.getElementById("vehicule").value = civil.vehicule;
+        document.getElementById("numero").value = civil.numero;
+        document.getElementById("adresse").value = civil.adresse;
+        document.getElementById("notes").value = civil.notes;
+        document.getElementById("editIndex").value = index;
+    }
+
+    function deleteCivil(index) {
+        if (confirm("Supprimer ce civil ?")) {
+            civils.splice(index, 1);
+            localStorage.setItem("civilsRemiremont", JSON.stringify(civils));
+            renderTable();
+        }
+    }
+
+    function clearForm() {
+        document.getElementById("prenom").value = "";
+        document.getElementById("nom").value = "";
+        document.getElementById("fonction").value = "";
+        document.getElementById("vehicule").value = "";
+        document.getElementById("numero").value = "";
+        document.getElementById("adresse").value = "";
+        document.getElementById("notes").value = "";
+    }
+</script>
+
+</body>
+</html>
