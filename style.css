@@ -1,0 +1,121 @@
+/* — Reset & Base */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #222;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+/* — Header */
+
+.header {
+    background: #002147;
+    padding: 15px 0;
+}
+
+.header .logo img {
+    width: 180px;
+}
+
+.nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* — Hero */
+
+.hero {
+    background: url('../img/hero_bg.jpg') center/cover no-repeat;
+    color: #fff;
+    padding: 80px 0;
+    text-align: center;
+}
+
+/* — Sections */
+
+.section {
+    padding: 60px 0;
+}
+
+.alt-bg {
+    background: #f7f7f7;
+}
+
+.section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* — Institutions Grid */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+/* — Actualités */
+
+.news + .news {
+    margin-top: 20px;
+}
+
+/* — Services */
+
+.services-list {
+    list-style: none;
+    text-align: center;
+}
+
+.services-list li + li {
+    margin-top: 10px;
+}
+
+.services-list a {
+    text-decoration: none;
+    color: #002147;
+    font-weight: bold;
+}
+
+/* — Footer */
+
+.footer {
+    background: #002147;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 14px;
+}
+
+.footer a {
+    color: #fff;
+    text-decoration: underline;
+}
